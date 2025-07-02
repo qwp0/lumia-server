@@ -1,6 +1,5 @@
 import admin from "firebase-admin";
 import dotenv from "dotenv";
-import "./firebase/firebaseAdmin.js";
 
 dotenv.config();
 
