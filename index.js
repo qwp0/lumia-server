@@ -8,6 +8,7 @@ import { Server } from "socket.io";
 import "./firebase/firebaseAdmin.js";
 import slideRouter from "./routes/slides.js";
 import roomRouter from "./routes/room.js";
+import { roomStore } from "./stores/roomStore.js";
 
 dotenv.config();
 
@@ -25,6 +26,16 @@ const io = new Server(httpServer, {
 
 io.on("connection", (socket) => {
   console.log("소켓 연결: ", socket.id);
+
+  socket.on("join_room", ({ roomId, nickname }) => {
+    if (!roomStore.has(roomId)) {
+      console.log("유효하지 않은 발표방입니다.");
+      return;
+    }
+
+    socket.join(roomId);
+    console.log(`${nickname} 님이 ${roomId} 방에 입장`);
+  });
 
   socket.on("disconnect", () => {
     console.log("연결 해제:", socket.id);
