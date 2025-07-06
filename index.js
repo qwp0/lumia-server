@@ -44,6 +44,34 @@ io.on("connection", (socket) => {
     });
   });
 
+  socket.on("text-feedback", ({ roomId, page, nickname, role, message }) => {
+    const room = roomStore.get(roomId);
+    if (!room) return;
+
+    const now = new Date();
+    const formattedTime = now.toLocaleTimeString("ko-KR", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+
+    const newFeedback = {
+      nickname,
+      role,
+      time: formattedTime,
+      text: message,
+      page,
+    };
+
+    if (!room.feedbacks[page]) {
+      room.feedbacks[page] = [];
+    }
+
+    room.feedbacks[page].push(newFeedback);
+
+    socket.emit("text-feedback", newFeedback);
+    socket.to(roomId).emit("text-feedback", newFeedback);
+  });
+
   socket.on("disconnect", () => {
     console.log("연결 해제:", socket.id);
   });
