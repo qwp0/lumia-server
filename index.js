@@ -27,7 +27,7 @@ const io = new Server(httpServer, {
 io.on("connection", (socket) => {
   console.log("소켓 연결: ", socket.id);
 
-  socket.on("join_room", ({ roomId, nickname }) => {
+  socket.on("join_room", ({ roomId, nickname, role }) => {
     const room = roomStore.get(roomId);
 
     if (!room) {
@@ -36,11 +36,14 @@ io.on("connection", (socket) => {
     }
 
     socket.join(roomId);
-    console.log(`${nickname} 님이 ${roomId} 방에 입장`);
+    console.log(
+      `${role === "host" ? "[발표자]" : ""}${nickname} 님이 ${roomId} 방에 입장`
+    );
 
     socket.emit("init_room", {
       slideUrl: room.slideUrl,
       currentPage: room.currentPage,
+      feedbacks: room.feedbacks || {},
     });
   });
 
