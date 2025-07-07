@@ -82,6 +82,8 @@ io.on("connection", (socket) => {
     const cursorData = { roomId, page, x, y, nickname };
 
     console.log(`[cursor-move] ${nickname} at page ${page}: (${x}, ${y})`);
+
+    socket.to(roomId).emit("cursor-move", cursorData);
   });
 
   socket.on("disconnect", () => {
