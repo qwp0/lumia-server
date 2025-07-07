@@ -75,6 +75,17 @@ io.on("connection", (socket) => {
     socket.to(roomId).emit("text-feedback", newFeedback);
   });
 
+  socket.on("cursor-move", ({ roomId, page, x, y, nickname }) => {
+    const room = roomStore.get(roomId);
+    if (!room) return;
+
+    const cursorData = { roomId, page, x, y, nickname };
+
+    console.log(`[cursor-move] ${nickname} at page ${page}: (${x}, ${y})`);
+
+    socket.to(roomId).emit("cursor-move", cursorData);
+  });
+
   socket.on("disconnect", () => {
     console.log("연결 해제:", socket.id);
   });
