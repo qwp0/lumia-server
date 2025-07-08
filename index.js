@@ -95,6 +95,13 @@ io.on("connection", (socket) => {
     socket.to(roomId).emit("slide-change", { page });
   });
 
+  socket.on("current-page", (roomId) => {
+    const room = roomStore.get(roomId);
+    if (!room) return;
+
+    socket.emit("current-page", { page: room.currentPage });
+  });
+
   socket.on("disconnect", () => {
     console.log("연결 해제:", socket.id);
   });
