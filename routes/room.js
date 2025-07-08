@@ -16,7 +16,7 @@ roomRouter.post("/create", (req, res) => {
   const initialState = {
     slideUrl: slideUrl,
     currentPage: 1,
-    annotations: [],
+    drawings: {},
     feedbacks: [],
   };
 
