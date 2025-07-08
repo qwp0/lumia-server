@@ -44,6 +44,7 @@ io.on("connection", (socket) => {
       slideUrl: room.slideUrl,
       currentPage: room.currentPage,
       feedbacks: room.feedbacks || {},
+      drawings: room.drawings || {},
     });
   });
 
@@ -100,6 +101,15 @@ io.on("connection", (socket) => {
     if (!room) return;
 
     socket.emit("current-page", { page: room.currentPage });
+  });
+
+  socket.on("draw-data", ({ roomId, page, drawings }) => {
+    const room = roomStore.get(roomId);
+    if (!room) return;
+
+    room.drawings[page] = { drawings };
+
+    socket.to(roomId).emit("draw-data", { page, drawings });
   });
 
   socket.on("disconnect", () => {
