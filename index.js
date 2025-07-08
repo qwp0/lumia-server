@@ -86,6 +86,15 @@ io.on("connection", (socket) => {
     socket.to(roomId).emit("cursor-move", cursorData);
   });
 
+  socket.on("slide-change", ({ roomId, page }) => {
+    const room = roomStore.get(roomId);
+    if (!room) return;
+
+    room.currentPage = page;
+    console.log(`[slide-change] ${roomId} -> page ${page}`);
+    socket.to(roomId).emit("slide-change", { page });
+  });
+
   socket.on("disconnect", () => {
     console.log("연결 해제:", socket.id);
   });
