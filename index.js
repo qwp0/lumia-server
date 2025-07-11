@@ -48,7 +48,7 @@ io.on("connection", (socket) => {
     });
   });
 
-  socket.on("text-feedback", ({ roomId, page, nickname, role, message }) => {
+  socket.on("text-feedback", ({ roomId, page, nickname, role, text }) => {
     const room = roomStore.get(roomId);
     if (!room) return;
 
@@ -62,7 +62,7 @@ io.on("connection", (socket) => {
       nickname,
       role,
       time: formattedTime,
-      text: message,
+      text,
       page,
     };
 
@@ -110,6 +110,16 @@ io.on("connection", (socket) => {
     room.drawings[page] = { drawings };
 
     socket.to(roomId).emit("draw-data", { page, drawings });
+  });
+
+  socket.on("presentation-end", ({ roomId }) => {
+    const room = roomStore.get(roomId);
+    if (!room) return;
+
+    console.log(`[presentation-end] 발표 종료됨: ${roomId}`);
+
+    socket.to(roomId).emit("presentation-end");
+    roomStore.delete(roomId);
   });
 
   socket.on("disconnect", () => {
