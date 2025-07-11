@@ -112,6 +112,16 @@ io.on("connection", (socket) => {
     socket.to(roomId).emit("draw-data", { page, drawings });
   });
 
+  socket.on("presentation-end", ({ roomId }) => {
+    const room = roomStore.get(roomId);
+    if (!room) return;
+
+    console.log(`[presentation-end] 발표 종료됨: ${roomId}`);
+
+    socket.to(roomId).emit("presentation-end");
+    roomStore.delete(roomId);
+  });
+
   socket.on("disconnect", () => {
     console.log("연결 해제:", socket.id);
   });
