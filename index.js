@@ -48,7 +48,7 @@ io.on("connection", (socket) => {
     });
   });
 
-  socket.on("text-feedback", ({ roomId, page, nickname, role, message }) => {
+  socket.on("text-feedback", ({ roomId, page, nickname, role, text }) => {
     const room = roomStore.get(roomId);
     if (!room) return;
 
@@ -62,7 +62,7 @@ io.on("connection", (socket) => {
       nickname,
       role,
       time: formattedTime,
-      text: message,
+      text,
       page,
     };
 
