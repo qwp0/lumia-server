@@ -66,11 +66,11 @@ io.on("connection", (socket) => {
       page,
     };
 
-    if (!room.feedbacks[page]) {
-      room.feedbacks[page] = [];
+    if (!Array.isArray(room.feedbacks)) {
+      room.feedbacks = [];
     }
 
-    room.feedbacks[page].push(newFeedback);
+    room.feedbacks.push(newFeedback);
 
     socket.emit("text-feedback", newFeedback);
     socket.to(roomId).emit("text-feedback", newFeedback);
