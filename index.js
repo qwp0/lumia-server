@@ -43,7 +43,7 @@ io.on("connection", (socket) => {
     socket.emit("init_room", {
       slideUrl: room.slideUrl,
       currentPage: room.currentPage,
-      feedbacks: room.feedbacks || {},
+      feedbacks: room.feedbacks || [],
       drawings: room.drawings || {},
     });
   });
@@ -66,11 +66,11 @@ io.on("connection", (socket) => {
       page,
     };
 
-    if (!room.feedbacks[page]) {
-      room.feedbacks[page] = [];
+    if (!Array.isArray(room.feedbacks)) {
+      room.feedbacks = [];
     }
 
-    room.feedbacks[page].push(newFeedback);
+    room.feedbacks.push(newFeedback);
 
     socket.emit("text-feedback", newFeedback);
     socket.to(roomId).emit("text-feedback", newFeedback);
