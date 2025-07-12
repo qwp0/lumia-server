@@ -43,7 +43,7 @@ io.on("connection", (socket) => {
     socket.emit("init_room", {
       slideUrl: room.slideUrl,
       currentPage: room.currentPage,
-      feedbacks: room.feedbacks || {},
+      feedbacks: room.feedbacks || [],
       drawings: room.drawings || {},
     });
   });
