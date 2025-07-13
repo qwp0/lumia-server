@@ -5,7 +5,6 @@ import cors from "cors";
 import http from "http";
 import { Server } from "socket.io";
 
-import "./firebase/firebaseAdmin.js";
 import slideRouter from "./routes/slides.js";
 import roomRouter from "./routes/room.js";
 import { roomStore } from "./stores/roomStore.js";
