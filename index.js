@@ -8,6 +8,7 @@ import { Server } from "socket.io";
 import slideRouter from "./routes/slides.js";
 import roomRouter from "./routes/room.js";
 import { roomStore } from "./stores/roomStore.js";
+import { deleteFileFromS3 } from "./services/storageService.js";
 
 dotenv.config();
 
@@ -111,13 +112,19 @@ io.on("connection", (socket) => {
     socket.to(roomId).emit("draw-data", { page, drawings });
   });
 
-  socket.on("presentation-end", ({ roomId }) => {
+  socket.on("presentation-end", async ({ roomId }) => {
     const room = roomStore.get(roomId);
     if (!room) return;
 
     console.log(`[presentation-end] 발표 종료됨: ${roomId}`);
 
     socket.to(roomId).emit("presentation-end");
+    const slideUrl = room.slideUrl;
+    const key = slideUrl?.split(".amazonaws.com/")[1];
+
+    if (key) {
+      await deleteFileFromS3(key);
+    }
     roomStore.delete(roomId);
   });
 
