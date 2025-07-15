@@ -133,8 +133,13 @@ io.on("connection", (socket) => {
   });
 });
 
-app.use(cors());
-app.use(express.json());
+app.use(
+  cors({
+    origin: [process.env.CLIENT_DEV_ORIGIN, process.env.CLIENT_PROD_ORIGIN],
+    methods: ["GET", "POST"],
+  })
+);
+app.use(express.json({ limit: "50mb" }));
 app.use("/slides", slideRouter);
 app.use("/room", roomRouter);
 
@@ -143,5 +148,5 @@ app.get("/", (req, res) => {
 });
 
 httpServer.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+  console.log(`Server is running on port ${PORT}`);
 });
