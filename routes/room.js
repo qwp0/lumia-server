@@ -25,4 +25,16 @@ roomRouter.post("/create", (req, res) => {
   res.status(201).json({ roomId });
 });
 
+roomRouter.get("/:roomId/exists", (req, res) => {
+  const { roomId } = req.params;
+
+  const exists = roomStore.has(roomId);
+
+  if (exists) {
+    res.status(200).json({ exists: true });
+  } else {
+    res.status(404).json({ exists: false, message: "존재하지 않는 방입니다." });
+  }
+});
+
 export default roomRouter;
